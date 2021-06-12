@@ -14,13 +14,13 @@ class TTSPanel extends StatefulWidget {
 class _TTSPanelState extends State<TTSPanel> {
   bool _isPlaying = false;
   late FlutterTts _flutterTts;
-  TextEditingController textEditingController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Text to Speech'),
+        title: const Text('Text to Speech'),
         backgroundColor: Colors.white,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -28,14 +28,14 @@ class _TTSPanelState extends State<TTSPanel> {
         animate: _isPlaying,
         glowColor: Colors.black,
         endRadius: 80,
-        duration: Duration(milliseconds: 700),
-        repeatPauseDuration: Duration(milliseconds: 70),
+        duration: const Duration(milliseconds: 700),
+        repeatPauseDuration: const Duration(milliseconds: 70),
         repeat: true,
         child: Container(
           width: 80.0,
           height: 80.0,
           child: FloatingActionButton(
-            onPressed: () => onSpeak(context, textEditingController.text),
+            onPressed: () => _onSpeak(context, _textEditingController.text),
             child: Icon(_isPlaying ? Icons.stop : Icons.play_arrow, size: 30.0),
           ),
         ),
@@ -43,7 +43,7 @@ class _TTSPanelState extends State<TTSPanel> {
       body: Container(
         margin: EdgeInsets.all(30),
         child: TextFormField(
-          controller: textEditingController,
+          controller: _textEditingController,
           decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: 'Inserisci il testo da leggere',
@@ -87,15 +87,15 @@ class _TTSPanelState extends State<TTSPanel> {
     });
   }
 
-  void onSpeak(BuildContext context, String text) async {
+  void _onSpeak(BuildContext context, String text) async {
     if (!_isPlaying) {
-      if (text.isNotEmpty) {
+      if (text.trim().isNotEmpty) {
         await _flutterTts.setLanguage('it-IT');
         await _flutterTts.setPitch(1);
 
-        var result = await _flutterTts.speak(text);
+        var _result = await _flutterTts.speak(text);
 
-        if (result == 1) {
+        if (_result == 1) {
           setState(() {
             _isPlaying = true;
           });
@@ -109,9 +109,9 @@ class _TTSPanelState extends State<TTSPanel> {
         );
       }
     } else {
-      var result = await _flutterTts.stop();
+      var _result = await _flutterTts.stop();
 
-      if (result == 1) {
+      if (_result == 1) {
         setState(() {
           _isPlaying = false;
         });
@@ -122,7 +122,7 @@ class _TTSPanelState extends State<TTSPanel> {
   @override
   void dispose() {
     _flutterTts.stop();
-    textEditingController.dispose();
+    _textEditingController.dispose();
     super.dispose();
   }
 }

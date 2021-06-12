@@ -27,7 +27,7 @@ class _STTPanelState extends State<STTPanel> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Speech to Text'),
+          title: const Text('Speech to Text'),
           backgroundColor: Colors.white,
           actions: [
             IconButton(
@@ -48,14 +48,14 @@ class _STTPanelState extends State<STTPanel> {
           animate: _isListening,
           glowColor: Colors.black,
           endRadius: 80,
-          duration: Duration(milliseconds: 700),
-          repeatPauseDuration: Duration(milliseconds: 70),
+          duration: const Duration(milliseconds: 700),
+          repeatPauseDuration: const Duration(milliseconds: 70),
           repeat: true,
           child: Container(
             width: 80.0,
             height: 80.0,
             child: FloatingActionButton(
-              onPressed: () => onListen(),
+              onPressed: () => _onListen(),
               child: Icon(
                 _isListening ? Icons.mic : Icons.mic_none,
                 size: 30.0,
@@ -79,7 +79,7 @@ class _STTPanelState extends State<STTPanel> {
         ));
   }
 
-  void onListen() async {
+  void _onListen() async {
     if (!_isListening) {
       bool available = await _speech.initialize(
         onStatus: (val) {
